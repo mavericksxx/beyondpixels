@@ -1,0 +1,14 @@
+{
+  "name": "text-to-image-generator",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^3.3.2"
+  },
+  "type": "module"
+}
