@@ -1,5 +1,3 @@
-Here’s the README.md in proper markdown format for easy copying:
-
 AI Text-to-Image Generator Web App
 
 This is a web application that generates images from textual descriptions using Hugging Face’s inference API. Simply input a text description, and the app will use AI to create a corresponding image.
