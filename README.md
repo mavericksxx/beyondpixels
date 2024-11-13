@@ -20,8 +20,8 @@ Installation and Setup
 
 	1.	Clone the repository:
 
-git clone https://github.com/your-username/image-generation-app.git
-cd image-generation-app
+git clone https://github.com/mavericksxx/image-gen-webapp.git
+cd image-gen-webapp
 
 
 	2.	Install dependencies:
