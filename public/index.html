@@ -61,16 +61,9 @@
             <!-- Loading State -->
             <div id="loading" class="hidden fade-in">
                 <div class="glass-card p-8 rounded-xl text-center">
-                    <div class="flex flex-col items-center">
-                        <div class="progress-container">
-                            <div class="progress-bar"></div>
-                        </div>
-                        <div class="loading-phases w-full">
-                            <span>Interpreting</span>
-                            <span>Generating</span>
-                            <span>Refining</span>
-                        </div>
-                        <p class="loading-text mt-4">Creating your masterpiece...</p>
+                    <div class="flex items-center justify-center space-x-4">
+                        <div class="loading-spinner"></div>
+                        <p class="text-xl">Creating your masterpiece...</p>
                     </div>
                 </div>
             </div>
@@ -87,10 +80,48 @@
 
             <!-- Error Message -->
             <div id="error" class="hidden mt-4 p-4 rounded-xl"></div>
+
+            <!-- Image Gallery -->
+            <div class="glass-card p-8 rounded-xl mt-12">
+                <h3 class="text-2xl font-semibold mb-6 logo-gradient">Gallery of Generated Images</h3>
+                <div class="carousel">
+                    <div class="carousel-inner" id="carousel">
+                        <!-- Placeholder images -->
+                        <div class="carousel-item">
+                            <img src="https://picsum.photos/300/300?random=1" alt="Generated artwork 1">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://picsum.photos/300/300?random=2" alt="Generated artwork 2">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://picsum.photos/300/300?random=3" alt="Generated artwork 3">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://picsum.photos/300/300?random=4" alt="Generated artwork 4">
+                        </div>
+                    </div>
+                    <div class="carousel-nav">
+                        <button class="carousel-button" onclick="moveCarousel(-1)">Previous</button>
+                        <button class="carousel-button" onclick="moveCarousel(1)">Next</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
     <script>
+        let currentPosition = 0;
+        const carousel = document.getElementById('carousel');
+        const items = document.querySelectorAll('.carousel-item');
+        const itemWidth = 316; // 300px + 1rem margin
+        const maxPosition = -(items.length - 3) * itemWidth;
+
+        function moveCarousel(direction) {
+            currentPosition += direction * itemWidth;
+            currentPosition = Math.min(0, Math.max(currentPosition, maxPosition));
+            carousel.style.transform = `translateX(${currentPosition}px)`;
+        }
+
         async function generateImage() {
             const textInput = document.getElementById('text-input').value;
             const loading = document.getElementById('loading');
