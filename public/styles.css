@@ -1,10 +1,10 @@
 :root {
   --color-background: #2a1810;
-  --color-glass: rgba(255, 255, 255, 0.08);
-  --color-text: #e2d8d0;
-  --color-primary: #c17f59;
-  --color-secondary: #849b8e;
-  --color-accent: #e6b17d;
+  --color-glass: rgba(255, 255, 255, 0.12);
+  --color-text: #fff5ed;
+  --color-primary: #ff9d5c;
+  --color-secondary: #98c7b0;
+  --color-accent: #ffd700;
   --blur-amount: 12px;
 }
 
@@ -24,7 +24,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(42, 24, 16, 0.4);
+  background: rgba(42, 24, 16, 0.3);
   z-index: -1;
 }
 
@@ -32,7 +32,7 @@ body {
   background: rgba(42, 24, 16, 0.85);
   backdrop-filter: blur(var(--blur-amount));
   -webkit-backdrop-filter: blur(var(--blur-amount));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .logo-gradient {
@@ -43,27 +43,27 @@ body {
 }
 
 .glass-card {
-  background: rgba(42, 24, 16, 0.75);
+  background: rgba(42, 24, 16, 0.65);
   backdrop-filter: blur(var(--blur-amount));
   -webkit-backdrop-filter: blur(var(--blur-amount));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
 }
 
 .input-area {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: var(--color-text);
   transition: all 0.3s ease;
   font-size: 1.1rem;
 }
 
 .input-area:focus {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(193, 127, 89, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
 }
 
 .btn-generate {
@@ -77,9 +77,9 @@ body {
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid rgba(193, 127, 89, 0.1);
+  border: 3px solid rgba(255, 157, 92, 0.2);
   border-radius: 50%;
-  border-top-color: var(--color-primary);
+  border-top-color: var(--color-accent);
   animation: spin 1s linear infinite;
 }
 
