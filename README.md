@@ -1,77 +1,81 @@
-AI Text-to-Image Generator Web App
+# AI Text-to-Image Generator Web App
 
 This is a web application that generates images from textual descriptions using Hugging Face’s inference API. Simply input a text description, and the app will use AI to create a corresponding image.
 
-Features
+## Features
 
-	•	Text-to-Image Generation: Users can input descriptive text to generate unique AI-generated images.
-	•	Image Gallery: A carousel showcases previously generated images.
-	•	User-Friendly Interface: A visually appealing, responsive UI with smooth transitions and animations.
+- Text-to-Image Generation: Users can input descriptive text to generate unique AI-generated images.
+- Image Gallery: A carousel showcases previously generated images.
+- User-Friendly Interface: A visually appealing, responsive UI with smooth transitions and animations.
 
-Tech Stack
+## Tech Stack
 
-	•	Backend: Node.js, Express
-	•	Frontend: HTML, CSS, Tailwind CSS, JavaScript
-	•	AI Model API: Hugging Face’s Inference API
+- Backend: Node.js, Express
+- Frontend: HTML, CSS, Tailwind CSS, JavaScript
+- AI Model API: Hugging Face’s Inference API
 
-Installation and Setup
+## Installation and Setup
 
-	1.	Clone the repository:
+1. Clone the repository:
 
-git clone https://github.com/mavericksxx/image-gen-webapp.git
-cd image-gen-webapp
+    ```bash
+    git clone https://github.com/mavericksxx/image-gen-webapp.git
+    cd image-gen-webapp
+    ```
 
+2. Install dependencies:
 
-	2.	Install dependencies:
+    ```bash
+    npm install
+    ```
 
-npm install
+3. Set up environment variables:
+    - Create a `.env` file in the root directory.
+    - Add your Hugging Face API key:
 
+    ```plaintext
+    HUGGINGFACE_API_KEY=your_huggingface_api_key
+    ```
 
-	3.	Set up environment variables:
-	•	Create a .env file in the root directory.
-	•	Add your Hugging Face API key:
+4. Run the server:
 
-HUGGINGFACE_API_KEY=your_huggingface_api_key
+    ```bash
+    npm start
+    ```
 
+5. Open your browser and navigate to `http://localhost:3000` to use the app.
 
-	4.	Run the server:
+## Usage
 
-npm start
+1. Enter a descriptive text in the input box (e.g., “A futuristic cityscape with neon lights”).
+2. Click Generate Image. The app will take a few moments to fetch and display the generated image.
+3. The generated image will appear below the input form. Errors will be displayed if generation fails.
+4. Browse previously generated images in the gallery.
 
+## Project Structure
 
-	5.	Open your browser and navigate to http://localhost:3000 to use the app.
+- `server.js`: Sets up the Express server, handles routes, and manages API calls to Hugging Face’s inference endpoint.
+- `public/`: Contains frontend assets.
+- `index.html`: The main HTML file with the user interface.
+- `styles.css`: Custom styles for the app interface, including animations and glassmorphism effects.
+- `.env`: Stores environment variables, including the API key.
 
-Usage
+## API Endpoints
 
-	1.	Enter a descriptive text in the input box (e.g., “A futuristic cityscape with neon lights”).
-	2.	Click Generate Image. The app will take a few moments to fetch and display the generated image.
-	3.	The generated image will appear below the input form. Errors will be displayed if generation fails.
-	4.	Browse previously generated images in the gallery.
+- `GET /`: Serves the main web application.
+- `POST /generate`: Accepts JSON input with the text description and returns the generated image.
 
-Project Structure
+## Dependencies
 
-	•	server.js: Sets up the Express server, handles routes, and manages API calls to Hugging Face’s inference endpoint.
-	•	public/: Contains frontend assets.
-	•	index.html: The main HTML file with the user interface.
-	•	styles.css: Custom styles for the app interface, including animations and glassmorphism effects.
-	•	.env: Stores environment variables, including the API key.
+- Express: For server-side functionality.
+- Node-fetch: For making HTTP requests to the Hugging Face API.
+- Dotenv: For managing environment variables.
 
-API Endpoints
-
-	•	GET /: Serves the main web application.
-	•	POST /generate: Accepts JSON input with the text description and returns the generated image.
-
-Dependencies
-
-	•	Express: For server-side functionality.
-	•	Node-fetch: For making HTTP requests to the Hugging Face API.
-	•	Dotenv: For managing environment variables.
-
-License
+## License
 
 This project is licensed under the MIT License.
 
-Acknowledgments
+## Acknowledgments
 
-	•	Hugging Face for their powerful AI models and inference API.
-	•	Tailwind CSS for providing a quick and easy way to style the application.
+- Hugging Face for their powerful AI models and inference API.
+- Tailwind CSS for providing a quick and easy way to style the application.
