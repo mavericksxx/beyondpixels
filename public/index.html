@@ -5,40 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Text-to-Image Generator</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="min-h-screen">
-    <div class="background-overlay"></div>
+    <div class="geometric-shapes left" id="geometricShapesLeft"></div>
+    <div class="geometric-shapes center" id="geometricShapesCenter"></div>
+    <div class="geometric-shapes right" id="geometricShapesRight"></div>
 
-    <!-- Navbar -->
-    <nav class="navbar fixed w-full top-0 z-50">
+    <nav class="navbar">
         <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
-                    <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <div>
-                        <h1 class="text-2xl font-bold logo-gradient">AI Text-to-Image Generator</h1>
-                        <p class="text-sm text-gray-600"> </p>
-                    </div>
+                    <h1 class="logo-text">AI Image Generator</h1>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="container mx-auto px-6 pt-32 pb-12">
         <div class="max-w-4xl mx-auto">
-            <!-- Input Card -->
+            <!-- input glassmorphic design card -->
             <div class="glass-card p-8 rounded-xl mb-8 fade-in">
-                <h2 class="text-3xl font-bold mb-6 logo-gradient">Create Your Vision</h2>
+                <h2 class="text-3xl font-bold mb-6">Create Your Vision</h2>
                 <div class="space-y-6">
                     <div>
                         <label for="text-input" class="block text-lg font-medium mb-2 text-gray-700">
-                            Describe image (try to be as detailed as possible)
+                            Describe your image
                         </label>
                         <textarea
                             id="text-input"
@@ -58,32 +51,32 @@
                 </div>
             </div>
 
-            <!-- Loading State -->
+            <!-- image gen load state -->
             <div id="loading" class="hidden fade-in">
                 <div class="glass-card p-8 rounded-xl text-center">
                     <div class="flex items-center justify-center space-x-4">
                         <div class="loading-spinner"></div>
-                        <p class="text-xl">Generating image (should take a few minutes)</p>
+                        <p class="text-xl">Generating image</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Result -->
+            <!-- output -->
             <div id="result" class="hidden">
                 <div class="glass-card p-8 rounded-xl">
-                    <h3 class="text-2xl font-semibold mb-6 logo-gradient">Your Generated Image</h3>
+                    <h3 class="text-2xl font-semibold mb-6">Your Generated Image</h3>
                     <div class="generated-image-container">
                         <img id="generated-image" class="w-full h-auto rounded-lg" alt="Generated image">
                     </div>
                 </div>
             </div>
 
-            <!-- Error Message -->
+            <!-- error msg -->
             <div id="error" class="hidden mt-4 p-4 rounded-xl"></div>
 
-            <!-- Image Gallery -->
+            <!-- img carousel -->
             <div class="glass-card p-8 rounded-xl mt-12">
-                <h3 class="text-2xl font-semibold mb-6 logo-gradient">Gallery of Generated Images</h3>
+                <h3 class="text-2xl font-semibold mb-6">Gallery</h3>
                 <div class="carousel">
                     <button class="carousel-arrow left" onclick="moveCarousel(1)">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,7 +89,6 @@
                         </svg>
                     </button>
                     <div class="carousel-inner" id="carousel">
-                        <!-- Placeholder images -->
                         <div class="carousel-item">
                             <img src="/images/image1.jpg" alt="Generated artwork 1" class="w-full h-auto rounded-lg">
                         </div>
@@ -116,24 +108,94 @@
     </main>
 
     <script>
+        function createGeometricShapes(containerId, side) {
+            const container = document.getElementById(containerId);
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(width, height);
+            container.appendChild(renderer.domElement);
+
+            // Create geometric shapes
+            const shapes = [];
+            const colors = [
+                new THREE.Color(0x6C9AE5), // Blue
+                new THREE.Color(0xFDE047), // Yellow
+                new THREE.Color(0xFB9278)  // Coral
+            ];
+
+            // Adjust number of shapes based on position
+            const numShapes = side === 'center' ? 25 : 15;
+            const spread = side === 'center' ? 6 : 4;
+
+            for (let i = 0; i < numShapes; i++) {
+                const geometry = new THREE.BufferGeometry();
+                const vertices = [];
+                
+                // Create triangle vertices with adjusted spread
+                vertices.push(
+                    Math.random() * spread - spread/2, Math.random() * spread - spread/2, Math.random() * spread - spread/2,
+                    Math.random() * spread - spread/2, Math.random() * spread - spread/2, Math.random() * spread - spread/2,
+                    Math.random() * spread - spread/2, Math.random() * spread - spread/2, Math.random() * spread - spread/2
+                );
+                
+                geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+                
+                const material = new THREE.MeshBasicMaterial({
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    transparent: true,
+                    opacity: side === 'center' ? 0.2 : 0.3,
+                    side: THREE.DoubleSide
+                });
+                
+                const mesh = new THREE.Mesh(geometry, material);
+                shapes.push(mesh);
+                scene.add(mesh);
+            }
+
+            camera.position.z = side === 'center' ? 8 : 5;
+            if (side === 'right') {
+                camera.position.x = 2;
+            } else if (side === 'left') {
+                camera.position.x = -2;
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                shapes.forEach(shape => {
+                    shape.rotation.x += 0.001;
+                    shape.rotation.y += 0.001;
+                });
+                renderer.render(scene, camera);
+            }
+
+            animate();
+        }
+
+        // Initialize geometric shapes
+        createGeometricShapes('geometricShapesLeft', 'left');
+        createGeometricShapes('geometricShapesCenter', 'center');
+        createGeometricShapes('geometricShapesRight', 'right');
+
+        // Carousel functionality
         let currentPosition = 0;
         const carousel = document.getElementById('carousel');
         const items = document.querySelectorAll('.carousel-item');
-        const itemWidth = 316; // 300px + 1rem margin
+        const itemWidth = 316;
         const totalItems = items.length;
         let autoScrollInterval;
         let isPaused = false;
 
-        // Initialize carousel
         function initCarousel() {
-            // Clone first few items and append to end for smooth infinite scroll
             const clonedItems = Array.from(items).slice(0, 3).map(item => item.cloneNode(true));
             clonedItems.forEach(item => carousel.appendChild(item));
             
             startAutoScroll();
             updateActiveItems();
 
-            // Add hover listeners to pause/resume auto-scroll
             carousel.parentElement.addEventListener('mouseenter', () => {
                 isPaused = true;
             });
@@ -148,26 +210,23 @@
                 if (!isPaused) {
                     moveCarousel(-1);
                 }
-            }, 3000); // Scroll every 3 seconds
+            }, 3000);
         }
 
         function moveCarousel(direction) {
             currentPosition += direction * itemWidth;
             const maxScroll = -(totalItems * itemWidth);
             
-            // Reset position for infinite scroll
             if (currentPosition < maxScroll) {
                 currentPosition = 0;
                 carousel.style.transition = 'none';
                 carousel.style.transform = `translateX(${currentPosition}px)`;
-                // Force reflow
                 carousel.offsetHeight;
                 carousel.style.transition = 'transform 0.5s ease';
             } else if (currentPosition > 0) {
                 currentPosition = maxScroll + itemWidth;
                 carousel.style.transition = 'none';
                 carousel.style.transform = `translateX(${currentPosition}px)`;
-                // Force reflow
                 carousel.offsetHeight;
                 carousel.style.transition = 'transform 0.5s ease';
             }
@@ -225,7 +284,6 @@
             }
         }
 
-        // Initialize carousel when page loads
         initCarousel();
     </script>
 </body>
