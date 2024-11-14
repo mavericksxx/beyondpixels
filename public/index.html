@@ -85,6 +85,16 @@
             <div class="glass-card p-8 rounded-xl mt-12">
                 <h3 class="text-2xl font-semibold mb-6 logo-gradient">Gallery of Generated Images</h3>
                 <div class="carousel">
+                    <button class="carousel-arrow left" onclick="moveCarousel(1)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button class="carousel-arrow right" onclick="moveCarousel(-1)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
                     <div class="carousel-inner" id="carousel">
                         <!-- Placeholder images -->
                         <div class="carousel-item">
@@ -100,10 +110,6 @@
                             <img src="/images/image4.jpg" alt="Generated artwork 4" class="w-full h-auto rounded-lg">
                         </div>
                     </div>
-                    <div class="carousel-nav">
-                        <button class="carousel-button" onclick="moveCarousel(1)">Previous</button>
-                        <button class="carousel-button" onclick="moveCarousel(-1)">Next</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -114,12 +120,67 @@
         const carousel = document.getElementById('carousel');
         const items = document.querySelectorAll('.carousel-item');
         const itemWidth = 316; // 300px + 1rem margin
-        const maxPosition = -(items.length - 3) * itemWidth;
+        const totalItems = items.length;
+        let autoScrollInterval;
+        let isPaused = false;
+
+        // Initialize carousel
+        function initCarousel() {
+            // Clone first few items and append to end for smooth infinite scroll
+            const clonedItems = Array.from(items).slice(0, 3).map(item => item.cloneNode(true));
+            clonedItems.forEach(item => carousel.appendChild(item));
+            
+            startAutoScroll();
+            updateActiveItems();
+
+            // Add hover listeners to pause/resume auto-scroll
+            carousel.parentElement.addEventListener('mouseenter', () => {
+                isPaused = true;
+            });
+            
+            carousel.parentElement.addEventListener('mouseleave', () => {
+                isPaused = false;
+            });
+        }
+
+        function startAutoScroll() {
+            autoScrollInterval = setInterval(() => {
+                if (!isPaused) {
+                    moveCarousel(-1);
+                }
+            }, 3000); // Scroll every 3 seconds
+        }
 
         function moveCarousel(direction) {
             currentPosition += direction * itemWidth;
-            currentPosition = Math.min(0, Math.max(currentPosition, maxPosition));
+            const maxScroll = -(totalItems * itemWidth);
+            
+            // Reset position for infinite scroll
+            if (currentPosition < maxScroll) {
+                currentPosition = 0;
+                carousel.style.transition = 'none';
+                carousel.style.transform = `translateX(${currentPosition}px)`;
+                // Force reflow
+                carousel.offsetHeight;
+                carousel.style.transition = 'transform 0.5s ease';
+            } else if (currentPosition > 0) {
+                currentPosition = maxScroll + itemWidth;
+                carousel.style.transition = 'none';
+                carousel.style.transform = `translateX(${currentPosition}px)`;
+                // Force reflow
+                carousel.offsetHeight;
+                carousel.style.transition = 'transform 0.5s ease';
+            }
+            
             carousel.style.transform = `translateX(${currentPosition}px)`;
+            updateActiveItems();
+        }
+
+        function updateActiveItems() {
+            const activeIndex = Math.abs(Math.round(currentPosition / itemWidth)) % totalItems;
+            items.forEach((item, index) => {
+                item.classList.toggle('active', index === activeIndex);
+            });
         }
 
         async function generateImage() {
@@ -163,6 +224,9 @@
                 loading.classList.add('hidden');
             }
         }
+
+        // Initialize carousel when page loads
+        initCarousel();
     </script>
 </body>
 </html>

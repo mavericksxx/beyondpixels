@@ -163,6 +163,12 @@ body {
 .carousel-item {
   min-width: 300px;
   margin-right: 1rem;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-item.active {
+  opacity: 1;
 }
 
 .carousel-item img {
@@ -172,19 +178,37 @@ body {
   border-radius: 12px;
 }
 
-.carousel-nav {
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
+  transition: all 0.3s ease;
+  z-index: 10;
 }
 
-.carousel-button {
-  background: linear-gradient(135deg, #ff9d5c, #ff7a1f);
+.carousel-arrow:hover {
+  background: rgba(255, 157, 92, 0.9);
   color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
+}
+
+.carousel-arrow.left {
+  left: 1rem;
+}
+
+.carousel-arrow.right {
+  right: 1rem;
+}
+
+.carousel-arrow svg {
+  width: 24px;
+  height: 24px;
 }
