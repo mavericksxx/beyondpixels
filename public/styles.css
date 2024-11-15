@@ -1,9 +1,9 @@
 :root {
   --color-text: #1a1a1a;
   --color-primary: #2d3748;
-  --color-accent-blue: rgba(108, 154, 229, 0.5);
-  --color-accent-yellow: rgba(253, 224, 71, 0.3);
-  --color-accent-coral: rgba(251, 146, 120, 0.4);
+  --color-accent-blue: #6C9AE5;
+  --color-accent-yellow: #FDE047;
+  --color-accent-coral: #FB9278;
 }
 
 body {
@@ -40,6 +40,27 @@ body {
   font-size: 1.75rem;
   color: var(--color-text);
   letter-spacing: -0.5px;
+}
+
+.monogram {
+  font-family: 'Warnock Pro', serif;
+  font-weight: 900;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-yellow), var(--color-accent-coral));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding: 0.5rem;
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.monogram:hover {
+  border-image: linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-yellow), var(--color-accent-coral)) 1;
+  transform: scale(1.05);
 }
 
 .glass-card {
