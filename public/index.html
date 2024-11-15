@@ -9,9 +9,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="min-h-screen">
-    <div class="geometric-shapes left" id="geometricShapesLeft"></div>
-    <div class="geometric-shapes center" id="geometricShapesCenter"></div>
-    <div class="geometric-shapes right" id="geometricShapesRight"></div>
+    <!-- geometric shapes container -->
+    <div class="geometric-shapes" id="geometricShapes"></div>
 
     <nav class="navbar">
         <div class="container mx-auto px-6 py-4">
@@ -25,9 +24,9 @@
 
     <main class="container mx-auto px-6 pt-32 pb-12">
         <div class="max-w-4xl mx-auto">
-            <!-- input glassmorphic design card -->
+            <!-- input -->
             <div class="glass-card p-8 rounded-xl mb-8 fade-in">
-                <h2 class="text-3xl font-bold mb-6">Create image using AI</h2>
+                <h2 class="text-3xl font-bold mb-6">Create Your Image Using AI</h2>
                 <div class="space-y-6">
                     <div>
                         <label for="text-input" class="block text-lg font-medium mb-2 text-gray-700">
@@ -51,7 +50,7 @@
                 </div>
             </div>
 
-            <!-- image gen load state -->
+            <!-- loading state -->
             <div id="loading" class="hidden fade-in">
                 <div class="glass-card p-8 rounded-xl text-center">
                     <div class="flex items-center justify-center space-x-4">
@@ -71,10 +70,10 @@
                 </div>
             </div>
 
-            <!-- error msg -->
+            <!-- error message -->
             <div id="error" class="hidden mt-4 p-4 rounded-xl"></div>
 
-            <!-- img carousel -->
+            <!-- gallery of generated images -->
             <div class="glass-card p-8 rounded-xl mt-12">
                 <h3 class="text-2xl font-semibold mb-6">Gallery of images generated</h3>
                 <div class="carousel">
@@ -108,10 +107,11 @@
     </main>
 
     <script>
-        function createGeometricShapes(containerId, side) {
-            const container = document.getElementById(containerId);
-            const width = container.offsetWidth;
-            const height = container.offsetHeight;
+        // geometric shapes
+        function createGeometricShapes() {
+            const container = document.getElementById('geometricShapes');
+            const width = window.innerWidth;
+            const height = window.innerHeight;
 
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
@@ -119,7 +119,6 @@
             renderer.setSize(width, height);
             container.appendChild(renderer.domElement);
 
-            // Create geometric shapes
             const shapes = [];
             const colors = [
                 new THREE.Color(0x6C9AE5), // Blue
@@ -127,15 +126,14 @@
                 new THREE.Color(0xFB9278)  // Coral
             ];
 
-            // Adjust number of shapes based on position
-            const numShapes = side === 'center' ? 25 : 15;
-            const spread = side === 'center' ? 6 : 4;
+            // create more shapes spread across the entire container
+            const numShapes = 40;
+            const spread = 12;
 
             for (let i = 0; i < numShapes; i++) {
                 const geometry = new THREE.BufferGeometry();
                 const vertices = [];
                 
-                // Create triangle vertices with adjusted spread
                 vertices.push(
                     Math.random() * spread - spread/2, Math.random() * spread - spread/2, Math.random() * spread - spread/2,
                     Math.random() * spread - spread/2, Math.random() * spread - spread/2, Math.random() * spread - spread/2,
@@ -147,7 +145,7 @@
                 const material = new THREE.MeshBasicMaterial({
                     color: colors[Math.floor(Math.random() * colors.length)],
                     transparent: true,
-                    opacity: side === 'center' ? 0.2 : 0.3,
+                    opacity: 0.2,
                     side: THREE.DoubleSide
                 });
                 
@@ -156,12 +154,7 @@
                 scene.add(mesh);
             }
 
-            camera.position.z = side === 'center' ? 8 : 5;
-            if (side === 'right') {
-                camera.position.x = 2;
-            } else if (side === 'left') {
-                camera.position.x = -2;
-            }
+            camera.position.z = 10;
 
             function animate() {
                 requestAnimationFrame(animate);
@@ -173,14 +166,18 @@
             }
 
             animate();
+
+            // handle window resize
+            window.addEventListener('resize', () => {
+                const newWidth = window.innerWidth;
+                const newHeight = window.innerHeight;
+                camera.aspect = newWidth / newHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(newWidth, newHeight);
+            });
         }
 
-        // Initialize geometric shapes
-        createGeometricShapes('geometricShapesLeft', 'left');
-        createGeometricShapes('geometricShapesCenter', 'center');
-        createGeometricShapes('geometricShapesRight', 'right');
-
-        // Carousel functionality
+        // carousel functionality
         let currentPosition = 0;
         const carousel = document.getElementById('carousel');
         const items = document.querySelectorAll('.carousel-item');
@@ -194,7 +191,6 @@
             clonedItems.forEach(item => carousel.appendChild(item));
             
             startAutoScroll();
-            updateActiveItems();
 
             carousel.parentElement.addEventListener('mouseenter', () => {
                 isPaused = true;
@@ -232,14 +228,6 @@
             }
             
             carousel.style.transform = `translateX(${currentPosition}px)`;
-            updateActiveItems();
-        }
-
-        function updateActiveItems() {
-            const activeIndex = Math.abs(Math.round(currentPosition / itemWidth)) % totalItems;
-            items.forEach((item, index) => {
-                item.classList.toggle('active', index === activeIndex);
-            });
         }
 
         async function generateImage() {
@@ -284,6 +272,8 @@
             }
         }
 
+        // initialize
+        createGeometricShapes();
         initCarousel();
     </script>
 </body>
