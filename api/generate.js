@@ -1,36 +1,24 @@
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import fetch from 'node-fetch';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const app = express();
-const port = process.env.PORT || 3000;
-
-app.use(express.json());
-app.use(express.static('public'));
-
-// Validate environment variables on startup
-if (!process.env.HUGGINGFACE_API_KEY) {
-  console.error('HUGGINGFACE_API_KEY is not set in environment variables');
-  process.exit(1);
-}
 
 const API_URL = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev";
 const headers = {
   "Authorization": `Bearer ${process.env.HUGGINGFACE_API_KEY}`
 };
 
-app.post('/generate', async (req, res) => {
-  console.log('Generate endpoint called');
+// Validate environment variables on initialization
+if (!process.env.HUGGINGFACE_API_KEY) {
+  throw new Error('HUGGINGFACE_API_KEY is not set in environment variables');
+}
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
+
   try {
+    console.log('Generate function called');
     console.log('Request body:', JSON.stringify(req.body));
-    
+
     if (!req.body || !req.body.text) {
       console.error('Invalid request body');
       return res.status(400).json({ error: 'Invalid request. Text is required.' });
@@ -60,30 +48,10 @@ app.post('/generate', async (req, res) => {
     res.type('image/jpeg').send(buffer);
 
   } catch (error) {
-    console.error('Error in generate endpoint:', error);
+    console.error('Error in generate function:', error);
     res.status(500).json({ 
       error: 'Failed to generate image',
       details: error.message
     });
   }
-});
-
-// Add a health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', env: process.env.NODE_ENV });
-});
-
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-  console.log('Environment:', process.env.NODE_ENV);
-  console.log('Hugging Face API key configured:', !!process.env.HUGGINGFACE_API_KEY);
-});
-
-// Handle uncaught errors
-process.on('unhandledRejection', (error) => {
-  console.error('Unhandled rejection:', error);
-});
-
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught exception:', error);
-});
+}
