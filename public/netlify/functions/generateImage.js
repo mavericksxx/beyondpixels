@@ -7,7 +7,7 @@ exports.handler = async function (event, context) {
 
   try {
     const response = await axios.post(
-      `https://api-inference.huggingface.co/models/${model}`,
+      `https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev/${model}`,
       { inputs: input },
       {
         headers: {
