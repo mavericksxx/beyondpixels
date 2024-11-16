@@ -26,7 +26,11 @@ app.get('/', (req, res) => {
 
 app.post('/generate', async (req, res) => {
   try {
+    console.log('Generate endpoint called');
     const { text } = req.body;
+    console.log('Input text:', text);
+    
+    console.log('Making API request to Hugging Face');
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: headers,
@@ -34,12 +38,14 @@ app.post('/generate', async (req, res) => {
     });
 
     if (!response.ok) {
+      console.error('Hugging Face API error:', response.status, await response.text());
       throw new Error('Failed to generate image');
     }
 
     const buffer = await response.buffer();
     res.type('image/jpeg').send(buffer);
   } catch (error) {
+    console.error('Error in generate endpoint:', error);
     res.status(500).json({ error: error.message });
   }
 });
