@@ -1,20 +1,28 @@
-const fetch = require("node-fetch");
+const axios = require('axios');
 
 exports.handler = async function (event, context) {
-  const { prompt } = JSON.parse(event.body);
-  const response = await fetch("https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ inputs: prompt }),
-  });
+  const apiKey = process.env.HUGGINGFACE_API_KEY;
+  const model = 'black-forest-labs/FLUX.1-dev'; 
+  const input = JSON.parse(event.body).input; 
 
-  const data = await response.json();
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(data),
-  };
+  try {
+    const response = await axios.post(
+      `https://api-inference.huggingface.co/models/${model}`,
+      { inputs: input },
+      {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+      }
+    );
+    return {
+      statusCode: 200,
+      body: JSON.stringify(response.data),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message }),
+    };
+  }
 };
